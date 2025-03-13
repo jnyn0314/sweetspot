@@ -1,6 +1,6 @@
 import React from 'react';
-import CounselingForm from './pages/CounselingForm/CounselingForm'; // 필요에 따라 경로 수정
-import './App.css';
+import CounselingForm from '../CounselingForm/CounselingForm'; // 필요에 따라 경로 수정
+import '../../App.css';
 
 function Student() {
   return (
