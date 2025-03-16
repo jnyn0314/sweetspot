@@ -1,7 +1,13 @@
 import React from 'react';
+import TopNavBar from '../../components/TopNavBar';
 
 function Facilities() {
-  return <h1>Facilities Page</h1>;
+  return (
+    <div>
+      <TopNavBar />
+      <h1>Facilities Page</h1>
+    </div>
+  );
 }
 
 export default Facilities;

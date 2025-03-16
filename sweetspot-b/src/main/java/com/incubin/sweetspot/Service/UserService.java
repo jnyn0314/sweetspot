@@ -22,11 +22,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<User> findByLoginId(String loginId) {
+        return userRepository.findByLoginId(loginId);
     }
-
+/*
     public boolean checkPassword(User user, String rawPassword) {
         return passwordEncoder.matches(rawPassword, user.getPassword());
     }
+ */
+public boolean checkPassword(User user, String rawPassword) {
+    // 평문 비밀번호 비교 (테스트용)
+    return rawPassword.equals(user.getPassword());
+}
+
 }

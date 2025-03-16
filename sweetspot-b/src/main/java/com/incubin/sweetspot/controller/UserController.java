@@ -1,39 +1,49 @@
 package com.incubin.sweetspot.controller;
 
-import com.incubin.sweetspot.entity.User;
 import com.incubin.sweetspot.Service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.incubin.sweetspot.dto.RequestLogin;
+import com.incubin.sweetspot.entity.Role;
+import com.incubin.sweetspot.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User registeredUser = userService.registerUser(user);
-        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody User user) {
-        Optional<User> existingUser = userService.findByUsername(user.getUsername());
+    public ResponseEntity<?> loginUser(@RequestBody RequestLogin loginRequest) {
+        String loginId = loginRequest.getLoginId();
+        String password = loginRequest.getPassword();
+        String role = loginRequest.getRole();
+
+        System.out.println("Received login request: loginId=" + loginId + ", role=" + role);
+
+        Optional<User> existingUser = userService.findByLoginId(loginId);
 
         if (existingUser.isPresent()) {
             User foundUser = existingUser.get();
-            if (userService.checkPassword(foundUser, user.getPassword())) {
-                return new ResponseEntity<>("Login successful", HttpStatus.OK);
+            if (userService.checkPassword(foundUser, password)) { // 평문 비밀번호 비교
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "Login successful");
+                response.put("role", foundUser.getRole());
+                return ResponseEntity.ok(response);
             } else {
-                return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
             }
         } else {
-            return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
         }
     }
 }
