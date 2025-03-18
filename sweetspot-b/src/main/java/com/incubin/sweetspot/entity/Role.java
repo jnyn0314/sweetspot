@@ -1,4 +1,7 @@
 package com.incubin.sweetspot.entity;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum Role {
-    STUDENT, TEACHER, ADMIN;
+    TEACHER, ADMIN
 }

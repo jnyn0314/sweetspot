@@ -34,7 +34,7 @@ public class UserController {
 
         if (existingUser.isPresent()) {
             User foundUser = existingUser.get();
-            if (userService.checkPassword(foundUser, password)) { // 평문 비밀번호 비교
+            if (userService.checkPassword(foundUser, password) && foundUser.getRole().toString().equalsIgnoreCase(role)){ // 평문 비밀번호 비교
                 Map<String, Object> response = new HashMap<>();
                 response.put("message", "Login successful");
                 response.put("role", foundUser.getRole());

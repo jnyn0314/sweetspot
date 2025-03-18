@@ -4,7 +4,7 @@ import axios from 'axios';
 import './Login.css';
 
 function Login() {
-  const [login_id, setLoginId] = useState('');
+  const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [role, setRole] = useState('');
@@ -24,7 +24,7 @@ function Login() {
       const response = await axios.post(
         `${apiUrl}/api/login`,
         {
-          loginId: login_id,
+          loginId: loginId,
           password: password,
           role: role,
         }
@@ -49,9 +49,9 @@ function Login() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="login_id"
+          name="loginId"
           placeholder="Id"
-          value={login_id}
+          value={loginId}
           onChange={(e) => setLoginId(e.target.value)}
         />
         <input
@@ -63,7 +63,6 @@ function Login() {
         />
         <select name="role" value={role} onChange={handleRoleChange} required>
           <option value="" disabled>Select Role</option>
-          <option value="student">학생</option>
           <option value="teacher">강사</option>
           <option value="admin">관리자</option>
         </select>
