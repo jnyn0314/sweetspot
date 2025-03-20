@@ -30,18 +30,25 @@ function Login() {
         }
       );
 
-      if (response.status === 200) {
-        // 로그인 성공 시 Student 페이지로 리다이렉트
-        navigate('/student');
+     if (response.data.success) {
+          // 토큰 저장
+          localStorage.setItem('token', response.data.token);
+
+          // 역할에 따른 리다이렉트
+          if(response.data.role === 'ADMIN'){
+            navigate('/admin');
+          } else if(response.data.role === 'TEACHER'){
+            navigate('/dashboard');
+          }
+        }
+      } catch (error) {
+        if (error.response?.status === 401) {
+          alert('잘못된 계정 정보입니다');
+        } else {
+          alert('로그인 처리 중 오류 발생');
+        }
       }
-    } catch (error) {
-      if (error.response?.status === 401) {
-        alert('잘못된 계정 정보입니다');
-      } else {
-        alert('로그인 처리 중 오류 발생');
-      }
-    }
-  };
+    };
 
   return (
     <div className="login-wrapper">
@@ -63,8 +70,8 @@ function Login() {
         />
         <select name="role" value={role} onChange={handleRoleChange} required>
           <option value="" disabled>Select Role</option>
-          <option value="teacher">강사</option>
-          <option value="admin">관리자</option>
+          <option value="TEACHER">강사</option>
+          <option value="ADMIN">관리자</option>
         </select>
         <div className="checkbox-wrapper">
           <input
