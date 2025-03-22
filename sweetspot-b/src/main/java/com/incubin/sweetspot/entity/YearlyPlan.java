@@ -1,24 +1,20 @@
 package com.incubin.sweetspot.entity;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "students")
-public class Student {
+@Table(name = "yearly_plans")
+public class YearlyPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String name;
-
-    private int grade;
-
-    @OneToMany(mappedBy = "student")
-    private List<StudentSubject> studentSubjects;
-
+    @ManyToOne
+    @JoinColumn(name = "student_subject_id")
+    private StudentSubject studentSubject;
+    private int year;
+    private String planDetails;
     private LocalDateTime createdAt = LocalDateTime.now();
-
-    // Getters and setters
+    // getters and setters
 }
