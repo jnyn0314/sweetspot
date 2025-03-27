@@ -5,17 +5,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "students")
-public class Student {
+@Table(name = "subjects")
+public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    private int grade;
+    @ManyToOne
+    @JoinColumn(name = "subject_table")
+    private SubjectTable subjectTable;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "subject")
     private List<StudentSubject> studentSubjects;
 
     private LocalDateTime createdAt = LocalDateTime.now();

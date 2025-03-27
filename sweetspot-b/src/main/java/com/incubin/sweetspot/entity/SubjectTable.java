@@ -16,6 +16,11 @@ public class SubjectTable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "subject_table_id")
+    private SubjectTable subjectTable;
+
+
     private LocalDate weekStartDate;
 
     @OneToMany(mappedBy = "subjectTable", cascade = CascadeType.ALL)

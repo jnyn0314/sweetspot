@@ -1,7 +1,6 @@
 package com.incubin.sweetspot.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.List;

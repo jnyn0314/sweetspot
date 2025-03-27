@@ -3,6 +3,9 @@ package com.incubin.sweetspot.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnTransformer;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 
 @Entity
 @Table(name = "users")
@@ -10,9 +13,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 50)
-    private String username;
-    @Column(name = "loginId", nullable = false, unique = true, length = 50)
+
+    @Column(name = "login_id", nullable = false, unique = true, length = 50)
     private String loginId;
 
     @Column(nullable = false)
@@ -21,6 +23,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+    public User() {
+    }
+    public User(String subject, String s, Collection<? extends GrantedAuthority> authorities) {
+    }
 
     public Long getId() {
         return id;
@@ -45,11 +51,5 @@ public class User {
     }
     public void setRole(Role role) {
         this.role = role;
-    }
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
     }
 }
