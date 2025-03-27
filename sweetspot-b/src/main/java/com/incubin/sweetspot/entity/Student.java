@@ -20,8 +20,10 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     private List<StudentSubject> studentSubjects;
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")  // 'teacher_id'는 'students' 테이블에서 외래 키로 사용됨
+    private Teacher teacher;
 
     public Long getId() {
         return id;
@@ -54,13 +56,4 @@ public class Student {
     public void setStudentSubjects(List<StudentSubject> studentSubjects) {
         this.studentSubjects = studentSubjects;
     }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
 }

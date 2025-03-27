@@ -8,8 +8,7 @@ public class StudentMapper {
         return new StudentDto(
                 student.getId(),
                 student.getName(),
-                student.getGrade(),
-                student.getCreatedAt()
+                student.getGrade()
         );
     }
 }
