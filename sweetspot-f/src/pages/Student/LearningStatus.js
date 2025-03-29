@@ -11,7 +11,7 @@ const LearningStatus = () => {
   // 토큰 가져오기
   const getToken = () => {
     const token = localStorage.getItem('token');
-    console.log('[getToken] Token:', token); // 로그 추가
+    console.log('[getToken] Token:', token);
     return token;
   };
 
@@ -24,10 +24,7 @@ const LearningStatus = () => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => {
-        console.log('[useEffect - Students] Response status:', response.status);
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
         console.log('[useEffect - Students] Fetched data:', data);
         setStudents(data);
@@ -61,11 +58,9 @@ const LearningStatus = () => {
           'Content-Type': 'application/json',
         },
       });
-      console.log('[fetchLearningStatus] Response status:', response.status);
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
@@ -101,7 +96,6 @@ const LearningStatus = () => {
         return acc;
       }, []);
 
-      console.log('[fetchLearningStatus] Formatted subjects:', formattedSubjects);
       setSubjects(formattedSubjects);
     } catch (error) {
       console.error('[fetchLearningStatus] Error fetching report:', error);
@@ -117,58 +111,49 @@ const LearningStatus = () => {
     console.log('[handleInputChange] Updated subjects:', updatedSubjects);
   };
 
-  // 과목 추가하기 핸들러
-  const handleAddSubject = async () => {
-    if (!newSubjectName || !newSubSubjectName) {
-      alert('과목 이름과 세부 과목 이름을 입력하세요.');
-      return;
-    }
+  // 수정된 데이터를 저장하는 함수
+  const handleSaveChanges = async () => {
+    if (window.confirm('수정하시겠습니까?')) { // 사용자 확인 팝업
+      const token = getToken();
+      const url = `${process.env.REACT_APP_API_URL}/admin/learning-status/update`;
 
-    const token = getToken();
-    const url = `${process.env.REACT_APP_API_URL}/admin/learning-status/add`;
+      // 서버로 보낼 데이터 준비
+      const updatedData = subjects.flatMap((subject) =>
+        subject.subSubjects.map((subSubject) => ({
+          id: subSubject.id,
+          planDetails: subSubject.planDetails,
+          feedbackDetails: subSubject.feedbackDetails,
+        }))
+      );
 
-    const newSubjectData = {
-      studentId: selectedStudentId,
-      subjectName: newSubjectName,
-      subSubjectName: newSubSubjectName,
-      planDetails: '',
-      feedbackDetails: '',
-      grade: null,
-    };
+      console.log('[handleSaveChanges] Sending updated data to server:', updatedData);
 
-    console.log('[handleAddSubject] Payload being sent:', newSubjectData);
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedData),
+        });
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newSubjectData),
-      });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-      console.log('[handleAddSubject] Response status:', response.status);
+        const result = await response.json();
+        console.log('[handleSaveChanges] Updated successfully:', result);
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+        alert('수정되었습니다!');
+
+        // 데이터 다시 가져오기
+        fetchLearningStatus();
+      } catch (error) {
+        console.error('[handleSaveChanges] Error updating data:', error);
+        alert('수정에 실패했습니다.');
       }
-
-      const result = await response.json();
-      console.log('[handleAddSubject] Added successfully:', result);
-
-      alert('과목이 성공적으로 추가되었습니다.');
-
-      // 데이터 다시 가져오기
-      fetchLearningStatus();
-    } catch (error) {
-      console.error('[handleAddSubject] Error adding subject:', error);
     }
-
-    // 입력 필드 초기화
-    setNewSubjectName('');
-    setNewSubSubjectName('');
   };
 
   return (
@@ -258,7 +243,7 @@ const LearningStatus = () => {
           </table>
 
           {/* 수정 버튼 */}
-          <button onClick={() => alert("수정하기 기능 구현 필요")}>수정하기</button>
+          <button onClick={handleSaveChanges}>수정하기</button>
 
           {/* 과목 추가하기 섹션 */}
           <div className="add-subject-section">
@@ -275,7 +260,7 @@ const LearningStatus = () => {
               value={newSubSubjectName}
               onChange={(e) => setNewSubSubjectName(e.target.value)}
             />
-            <button onClick={handleAddSubject}>추가하기</button>
+            <button onClick={() => alert('추가하기 기능 구현 필요')}>추가하기</button>
           </div>
         </div>
       </div>
