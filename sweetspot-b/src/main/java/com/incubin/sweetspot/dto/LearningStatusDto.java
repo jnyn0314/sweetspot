@@ -1,11 +1,17 @@
 package com.incubin.sweetspot.dto;
 
 public class LearningStatusDto {
+    private Long id; // weekly_plan_subjects 테이블의 ID
+    private Long studentId;
     private String subjectName;
     private String subSubjectName;
     private String feedbackDetails;
     private String planDetails;
-    private int grade;
+    private Integer grade; // 참조 타입으로 변경
+
+    public LearningStatusDto() {} // 기본 생성자 추가
+
+
 
     // Getters and Setters
     public String getSubjectName() {
@@ -40,11 +46,27 @@ public class LearningStatusDto {
         this.planDetails = planDetails;
     }
 
-    public int getGrade() {
+    public Integer getGrade() {
         return grade;
     }
 
     public void setGrade(int grade) {
         this.grade = grade;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }
