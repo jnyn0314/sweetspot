@@ -6,11 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
-    @Query("SELECT DISTINCT s FROM Subject s " +
-            "JOIN s.studentSubjects ss " +
-            "JOIN ss.weeklyPlanSubjects wps " +
-            "JOIN wps.weeklyPlan wp " +
-            "WHERE wp.student.id = :studentId")
-    List<Subject> findSubjectsByStudentWeeklyPlan(@Param("studentId") Long studentId);
+    // 주간 계획을 ID로 조회하는 메서드
+    List<Subject> findByWeeklyPlanSubjects_WeeklyPlan_Id(Long studentWeeklyPlanId);
 }

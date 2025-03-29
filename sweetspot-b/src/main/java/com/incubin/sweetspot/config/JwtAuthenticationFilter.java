@@ -27,9 +27,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String token = extractJwtFromRequest(request);
+        System.out.println("Received token: " + token); // 로그 추가
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
             Claims claims = jwtTokenProvider.getClaimsFromToken(token);
+            System.out.println("Token claims: " + claims); // 로그 추가
 
             String username = claims.getSubject();
             String role = claims.get("role", String.class);

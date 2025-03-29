@@ -1,7 +1,7 @@
 package com.incubin.sweetspot.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,14 +13,42 @@ public class Subject {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "subject_table")
-    private SubjectTable subjectTable;
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WeeklyPlanSubject> weeklyPlanSubjects = new ArrayList<>();
 
-    @OneToMany(mappedBy = "subject")
-    private List<StudentSubject> studentSubjects;
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubSubject> subSubjects = new ArrayList<>();
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-    // Getters and setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<WeeklyPlanSubject> getWeeklyPlanSubjects() {
+        return weeklyPlanSubjects;
+    }
+
+    public void setWeeklyPlanSubjects(List<WeeklyPlanSubject> weeklyPlanSubjects) {
+        this.weeklyPlanSubjects = weeklyPlanSubjects;
+    }
+
+    public List<SubSubject> getSubSubjects() {
+        return subSubjects;
+    }
+
+    public void setSubSubjects(List<SubSubject> subSubjects) {
+        this.subSubjects = subSubjects;
+    }
 }

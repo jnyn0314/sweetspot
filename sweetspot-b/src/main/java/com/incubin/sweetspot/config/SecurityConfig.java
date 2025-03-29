@@ -1,5 +1,6 @@
 package com.incubin.sweetspot.config;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
@@ -39,16 +40,22 @@ public class SecurityConfig {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    private static final String[] ALLOWED_URIS = {
+            "/api/register",
+            "/api/login",
+            "/error",
+            "/static/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/register", "/api/login").permitAll()
+                        .requestMatchers(ALLOWED_URIS).permitAll()
                         //.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/static/**").permitAll() // 정적 자원 접근 허용
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

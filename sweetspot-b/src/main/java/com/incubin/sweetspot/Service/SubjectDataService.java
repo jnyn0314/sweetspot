@@ -12,6 +12,6 @@ public class SubjectDataService {
     private SubjectRepository subjectRepository;
 
     public List<Subject> getSubjectsForStudent(Long studentId) {
-        return subjectRepository.findSubjectsByStudentWeeklyPlan(studentId);
+        return subjectRepository.findByWeeklyPlanSubjects_WeeklyPlan_Id(studentId);
     }
 }
