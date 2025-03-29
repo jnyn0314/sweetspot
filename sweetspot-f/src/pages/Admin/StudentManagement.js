@@ -1,20 +1,50 @@
-// StudentManagement.js
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './UserManagement.css';
 
 function StudentManagement() {
-  const [users, setUsers] = useState([]);
+  const [students, setStudents] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchStudents();
   }, []);
 
-  const fetchStudents = () => {
-    const data = [
-      { id: 3, name: '김학생', role: 'student', grade: 3, 담당Teacher: '김선생', subjects: ['국어', '영어'] },
-      { id: 4, name: '이학생', role: 'student', grade: 2, 담당Teacher: '박선생', subjects: ['수학', '과학'] },
-    ];
-    setUsers(data);
+const fetchStudents = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    // const url = 'http://localhost:8080/admin/student-management';
+    const url = `${process.env.REACT_APP_API_URL}/admin/student-management`;
+    const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+
+console.log('Token:', token);
+
+    console.log('Request URL ', url);
+    console.log('Request Headers ', headers);
+    const response = await fetch(url, {
+    method : 'GET',
+    headers,
+    credentials:'include'
+    });
+console.log('response 문제 ', response);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server response:', errorText);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    setStudents(data);
+  } catch (error) {
+    console.error('Error fetching students:', error);
+  }
+};
+
+  const handleViewStudent = (id) => {
+    navigate(`/admin/learning-status/${id}`);
   };
 
   return (
@@ -24,24 +54,19 @@ function StudentManagement() {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Role</th>
             <th>Grade</th>
-            <th>담당 Teacher</th>
-            <th>Subjects</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.role}</td>
-              <td>{user.grade}</td>
-              <td>{user.담당Teacher}</td>
-              <td>{user.subjects.join(', ')}</td>
+          {students.map((student) => (
+            <tr key={student.id}>
+              <td>{student.name}</td>
+              <td>{student.grade}</td>
               <td>
-                <button className="action-button">Edit</button>
-                <button className="action-button delete">Delete</button>
+                <button className="action-button" onClick={() => handleViewStudent(student.id)}>
+                  View
+                </button>
               </td>
             </tr>
           ))}

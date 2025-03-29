@@ -1,47 +1,46 @@
-/* General Styles */
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 0;
-}
-
-.admin-dashboard {
-  display: flex; /* 사이드바와 메인 컨텐츠를 가로로 배치 */
-  flex-direction: row; /* 가로 방향으로 배치 */
-  min-height: 100vh;
-}
-
 .sidebar {
-  width: 240px; /* 사이드바 너비 설정 */
+  width: 230px; /* 사이드바 너비 설정 */
+  height: 100vh;
   flex-shrink: 0; /* 사이드바가 줄어들지 않도록 설정 */
-  background-color: #f8f9fa; /* 사이드바 배경색 */
+  background-color: #f9f9f9; /* 배경색 */
+  position: fixed; /* 화면에 고정 */
+  top: 0; /* 상단 정렬 */
+  left: 0; /* 왼쪽 정렬 */
   padding: 20px;
+  overflow-y: auto; /* 내용이 많으면 스크롤 가능 */
 }
 
-.main-content {
-  flex: 1; /* 남은 공간을 모두 차지하도록 설정 */
-  overflow-x: auto; /* 필요에 따라 가로 스크롤 */
-  padding: 20px;
-  margin-left: 240px; /* 사이드바 너비만큼 여백 설정 */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
 }
 
-/* 미디어 쿼리: 작은 화면 */
-@media (max-width: 768px) {
-  .admin-dashboard {
-    flex-direction: column; /* 세로로 배치 */
-  }
+.nav-section {
+  margin-bottom: 20px;
+}
 
-  .sidebar {
-    position: static; /* fixed 해제 */
-    width: 100%; /* 전체 너비 */
-    height: auto; /* 높이 자동 조절 */
-    box-shadow: none; /* 그림자 제거 */
-    padding: 10px;
-  }
+.nav-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333; /* 텍스트 색상 */
+  margin-bottom: 10px;
+}
 
-  .main-content {
-    margin-left: 0; /* 왼쪽 여백 제거 */
-    padding: 10px;
-  }
+.nav-submenu {
+  list-style: none;
+  padding-left: 15px;
+}
+
+.nav-submenu li {
+  margin-bottom: 8px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333; /* 기본 텍스트 색상 */
+  transition: color 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.nav-link:hover {
+  color: #007bff; /* 링크 호버 시 강조 색상 */
 }

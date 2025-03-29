@@ -1,20 +1,46 @@
-// TeacherManagement.js
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './UserManagement.css';
 
 function TeacherManagement() {
-  const [users, setUsers] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchTeachers();
   }, []);
 
-  const fetchTeachers = () => {
-    const data = [
-      { id: 1, name: '김선생', role: 'teacher', teacherId: 'T123', password: 'password123' },
-      { id: 2, name: '박선생', role: 'teacher', teacherId: 'T456', password: 'password456' },
-    ];
-    setUsers(data);
+  const fetchTeachers = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const url = `${process.env.REACT_APP_API_URL}/admin/teacher-management`; // API 경로
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers,
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server response:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setTeachers(data);
+    } catch (error) {
+      console.error('Error fetching teachers:', error);
+    }
+  };
+
+  const handleViewTeacher = (id) => {
+    console.log("Navigating to:", `/admin/teacher-details/${id}`);
+    navigate(`/admin/teacher-details/${id}`);
   };
 
   return (
@@ -26,20 +52,23 @@ function TeacherManagement() {
             <th>Name</th>
             <th>Role</th>
             <th>ID</th>
-            <th>Password</th>
+            <th>College</th>
+            <th>Sex</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.role}</td>
-              <td>{user.teacherId}</td>
-              <td>{user.password}</td>
+          {teachers.map((teacher) => (
+            <tr key={teacher.id}>
+              <td>{teacher.name}</td>
+              <td>{teacher.role}</td>
+              <td>{teacher.loginId}</td>
+              <td>{teacher.college}</td>
+              <td>{teacher.sex}</td>
               <td>
-                <button className="action-button">Edit</button>
-                <button className="action-button delete">Delete</button>
+                <button className="action-button" onClick={() => handleViewTeacher(teacher.id)}>
+                  View
+                </button>
               </td>
             </tr>
           ))}
