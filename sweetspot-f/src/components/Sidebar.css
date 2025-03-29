@@ -1,46 +1,53 @@
 .sidebar {
-  width: 230px; /* 사이드바 너비 설정 */
-  height:100vh;
-    flex-shrink: 0; /* 사이드바가 줄어들지 않도록 설정 */
-    background-color: #f8f9fa; /* 사이드바 배경색 */
-    position: fixed; /* 화면에 고정 */
-      top: 0; /* 상단 정렬 */
-      left: 0; /* 왼쪽 정렬 */
-      background-color: #f8f9fa; /* 배경색 */
-      padding: 20px;
-      overflow-y: auto; /* 내용이 많으면 스크롤 가능 */
-}
-
-.sidebar-nav {
+  width: 230px;
+  height: 100vh;
+  flex-shrink: 0;
+  background-color: #f8f9fa;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease-in-out;
+  box-sizing: border-box;
+}
+.nav-submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-left: 15px;
+  margin-top: 20px; /* 원하는 간격 추가 */
+}
+.sidebar.closed {
+  left: -230px;
 }
 
 .nav-section {
   margin-bottom: 20px;
+  padding-top: 20px; /* 원하는 간격 추가 */
+}
+/* 사이드바 토글 버튼 스타일 (사이드바 밖에 위치) */
+.sidebar-toggle-button {
+  position: fixed; /* 항상 보이도록 fixed */
+  top: 20px;
+  left: 20px; /* 사이드바 위치와 동일하게 설정 */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  z-index: 1000; /* 사이드바보다 위에 표시 */
 }
 
-.nav-title {
-  font-size: 16px;
-  font-weight: bold;
-  color: #343a40;
-  margin-bottom: 10px;
-}
+/* 화면 너비가 768px 이하일 때 */
+@media (max-width: 768px) {
+  .sidebar {
+    left: -230px; /* 기본적으로 숨김 */
+  }
 
-.nav-submenu {
-  list-style: none;
-  padding-left: 15px;
-}
-
-.nav-submenu li {
-  margin-bottom: 8px;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: #495057;
-}
-
-.nav-link:hover {
-  color: #007bff;
+  .sidebar.closed {
+    left: 0; /* 토글 시 나타남 */
+  }
 }
